@@ -1,10 +1,12 @@
-# StockPilot 📦
+ <p align="left">
+  <img src="wwwroot/images/stockpilot-logo.png" alt="StockPilot" width="300">
+</p>
 
 **Sistema de gestión de inventario desarrollado con C# y ASP.NET Core.**
 
 StockPilot es una aplicación web para gestionar productos e inventario de forma sencilla. Permite registrar productos, consultar existencias, actualizar información y controlar los niveles de stock.
 
-## ✨ Funcionalidades
+## Funcionalidades
 
 - **Gestión de productos:** crear, consultar, editar y eliminar productos.
 - **Control de existencias:** consultar las unidades disponibles de cada producto.
@@ -14,7 +16,7 @@ StockPilot es una aplicación web para gestionar productos e inventario de forma
 - **Panel de resumen:** visualizar información general del inventario.
 - **Interfaz web:** diseño sencillo y adaptable para gestionar los productos.
 
-## 🛠️ Tecnologías utilizadas
+## Tecnologías utilizadas
 
 - C#
 - ASP.NET Core Web API
@@ -25,7 +27,7 @@ StockPilot es una aplicación web para gestionar productos e inventario de forma
 - JavaScript
 - Git y GitHub
 
-## 📋 Requisitos previos
+## Requisitos previos
 
 Para ejecutar el proyecto en tu ordenador necesitas:
 
@@ -33,7 +35,7 @@ Para ejecutar el proyecto en tu ordenador necesitas:
 - Visual Studio Code u otro editor compatible.
 - Una terminal, como PowerShell.
 
-## 🚀 Cómo ejecutar el proyecto
+## Cómo ejecutar el proyecto
 
 1. Clona este repositorio:
 
@@ -59,7 +61,7 @@ Para ejecutar el proyecto en tu ordenador necesitas:
 
 La base de datos SQLite se utiliza para almacenar los productos. La aplicación puede crear su base de datos local al iniciarse, según la configuración del proyecto.
 
-## 📁 Estructura del proyecto
+## Estructura del proyecto
 
 ```text
 StockPilot.Api/
@@ -79,7 +81,7 @@ StockPilot.Api/
 └── README.md
 ```
 
-## 🔮 Mejoras futuras
+## Mejoras futuras
 
 Algunas posibles mejoras para futuras versiones:
 
@@ -90,7 +92,7 @@ Algunas posibles mejoras para futuras versiones:
 - Añadir pruebas automatizadas.
 - Mejorar los informes y las estadísticas del inventario.
 
-## 👩‍💻 Autora
+## Autora
 
 Proyecto personal desarrollado como parte de mi aprendizaje de desarrollo de aplicaciones web con C# y .NET.
 
