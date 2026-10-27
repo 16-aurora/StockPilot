@@ -1,0 +1,13 @@
+# Archivos generados por .NET
+bin/
+obj/
+
+# Base de datos local de StockPilot
+stockpilot.db
+stockpilot.db-shm
+stockpilot.db-wal
+
+# Configuración local y secretos
+.env
+.env.*
+!.env.example

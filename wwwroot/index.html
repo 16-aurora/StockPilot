@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StockPilot | Inventario</title>
+
+    <!-- Tipografía Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: #f4f7fb;
+            color: #1e293b;
+        }
+
+        /* Cabecera y logotipo */
+        header {
+            background: #172554;
+            color: white;
+            padding: 20px 24px;
+        }
+
+        .site-header {
+            display: flex;
+            align-items: center;
+            min-height: 90px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .brand-logo {
+            display: block;
+            width: 300px;
+            max-width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 32px auto;
+            padding: 0 20px;
+        }
+
+        /* Tarjetas de resumen */
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .card,
+        .panel {
+            background: white;
+            padding: 22px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px #0f172a0d;
+        }
+
+        .card p {
+            margin: 0 0 10px;
+            color: #64748b;
+        }
+
+        .card strong {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .panel h2 {
+            margin-top: 0;
+            font-weight: 700;
+        }
+
+        /* Formulario */
+        .product-form {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .product-form h3 {
+            grid-column: 1 / -1;
+            margin: 0;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .form-group label {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            font-family: inherit;
+            font-size: 15px;
+            color: #1e293b;
+        }
+
+        .form-group input:focus {
+            outline: 2px solid #93c5fd;
+            border-color: #2563eb;
+        }
+
+        /* Botones */
+        button {
+            padding: 12px 18px;
+            border: none;
+            border-radius: 7px;
+            background: #2563eb;
+            color: white;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: wait;
+        }
+
+        .secondary-button {
+            background: #64748b;
+        }
+
+        .secondary-button:hover {
+            background: #475569;
+        }
+
+        .delete-button {
+            background: #dc2626;
+        }
+
+        .delete-button:hover {
+            background: #b91c1c;
+        }
+
+        /* Mensajes del formulario */
+        #form-message {
+            grid-column: 1 / -1;
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .success-message {
+            color: #166534;
+        }
+
+        .error-message {
+            color: #b91c1c;
+        }
+
+        /* Tabla de productos */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th,
+        td {
+            padding: 14px 12px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            color: #64748b;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        td {
+            font-size: 14px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 20px;
+            background: #dcfce7;
+            color: #166534;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .low-stock {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .message {
+            color: #64748b;
+            padding: 20px 0;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .actions button {
+            padding: 8px 12px;
+            font-size: 13px;
+        }
+
+        /* Adaptación a pantallas pequeñas */
+        @media (max-width: 600px) {
+            header {
+                padding: 20px;
+            }
+
+            .brand {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .brand-logo {
+                width: 240px;
+            }
+
+            main {
+                margin-top: 20px;
+                padding: 0 12px;
+            }
+
+            .card,
+            .panel {
+                padding: 16px;
+            }
+
+            .product-form {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="brand">
+            <img
+                src="/images/stockpilot-logo.png"
+                alt="StockPilot"
+                class="brand-logo">
+        </div>
+    </header>
+
+    <main>
+        <section class="summary">
+            <article class="card">
+                <p>Productos registrados</p>
+                <strong id="product-count">—</strong>
+            </article>
+
+            <article class="card">
+                <p>Unidades en inventario</p>
+                <strong id="total-stock">—</strong>
+            </article>
+
+            <article class="card">
+                <p>Productos con stock bajo</p>
+                <strong id="low-stock-count">—</strong>
+            </article>
+        </section>
+
+        <section class="panel">
+            <h2>Inventario de productos</h2>
+
+            <form id="product-form" class="product-form">
+                <h3 id="form-title">Añadir nuevo producto</h3>
+
+                <div class="form-group">
+                    <label for="name">Nombre del producto</label>
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        maxlength="100"
+                        required
+                        placeholder="Ej. Ratón inalámbrico">
+                </div>
+
+                <div class="form-group">
+                    <label for="sku">SKU (código único)</label>
+                    <input
+                        type="text"
+                        id="sku"
+                        name="sku"
+                        maxlength="50"
+                        required
+                        placeholder="Ej. RAT-001">
+                </div>
+
+                <div class="form-group">
+                    <label for="price">Precio (€)</label>
+                    <input
+                        type="number"
+                        id="price"
+                        name="price"
+                        min="0.01"
+                        step="0.01"
+                        required
+                        placeholder="Ej. 19.99">
+                </div>
+
+                <div class="form-group">
+                    <label for="stock">Unidades disponibles</label>
+                    <input
+                        type="number"
+                        id="stock"
+                        name="stock"
+                        min="0"
+                        step="1"
+                        required
+                        value="0">
+                </div>
+
+                <div class="form-group">
+                    <label for="minimumStock">Stock mínimo</label>
+                    <input
+                        type="number"
+                        id="minimumStock"
+                        name="minimumStock"
+                        min="0"
+                        step="1"
+                        required
+                        value="5">
+                </div>
+
+                <button id="submit-button" type="submit">
+                    Guardar producto
+                </button>
+
+                <button
+                    id="cancel-edit-button"
+                    class="secondary-button"
+                    type="button"
+                    hidden>
+                    Cancelar edición
+                </button>
+
+                <p
+                    id="form-message"
+                    role="status"
+                    aria-live="polite">
+                </p>
+            </form>
+
+            <h3>Productos registrados</h3>
+
+            <p id="message" class="message">
+                Cargando productos...
+            </p>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>SKU</th>
+                            <th>Precio</th>
+                            <th>Stock</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="products-table"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const productForm = document.getElementById("product-form");
+        const formMessage = document.getElementById("form-message");
+        const submitButton = document.getElementById("submit-button");
+        const cancelEditButton =
+            document.getElementById("cancel-edit-button");
+        const formTitle = document.getElementById("form-title");
+
+        let editingProductId = null;
+
+        // Cargar productos y actualizar los contadores
+        async function loadProducts() {
+            const message = document.getElementById("message");
+            const table = document.getElementById("products-table");
+
+            try {
+                const response = await fetch("/api/products");
+
+                if (!response.ok) {
+                    throw new Error(
+                        "No se pudieron cargar los productos."
+                    );
+                }
+
+                const products = await response.json();
+
+                document.getElementById("product-count").textContent =
+                    products.length;
+
+                document.getElementById("total-stock").textContent =
+                    products.reduce(
+                        (total, product) => total + product.stock,
+                        0
+                    );
+
+                document.getElementById("low-stock-count").textContent =
+                    products.filter(
+                        product => product.stock <= product.minimumStock
+                    ).length;
+
+                table.replaceChildren();
+
+                for (const product of products) {
+                    const row = document.createElement("tr");
+
+                    const values = [
+                        product.name,
+                        product.sku,
+                        Number(product.price).toLocaleString("es-ES", {
+                            style: "currency",
+                            currency: "EUR"
+                        }),
+                        product.stock
+                    ];
+
+                    for (const value of values) {
+                        const cell = document.createElement("td");
+                        cell.textContent = value;
+                        row.appendChild(cell);
+                    }
+
+                    // Mostrar el estado del stock
+                    const statusCell = document.createElement("td");
+                    const status = document.createElement("span");
+
+                    const isLowStock =
+                        product.stock <= product.minimumStock;
+
+                    status.className = isLowStock
+                        ? "status low-stock"
+                        : "status";
+
+                    status.textContent = isLowStock
+                        ? "Stock bajo"
+                        : "Disponible";
+
+                    statusCell.appendChild(status);
+                    row.appendChild(statusCell);
+
+                    // Columna de acciones
+                    const actionsCell = document.createElement("td");
+                    const actions = document.createElement("div");
+                    actions.className = "actions";
+
+                    // Botón Editar
+                    const editButton = document.createElement("button");
+                    editButton.type = "button";
+                    editButton.textContent = "Editar";
+
+                    editButton.addEventListener("click", function () {
+                        editProduct(product);
+                    });
+
+                    actions.appendChild(editButton);
+
+                    // Botón Eliminar
+                    const deleteButton = document.createElement("button");
+                    deleteButton.type = "button";
+                    deleteButton.textContent = "Eliminar";
+                    deleteButton.className = "delete-button";
+
+                    deleteButton.addEventListener("click", async function () {
+                        const confirmed = confirm(
+                            `¿Seguro que quieres eliminar el producto "${product.name}"? Esta acción no se puede deshacer.`
+                        );
+
+                        if (!confirmed) {
+                            return;
+                        }
+
+                        deleteButton.disabled = true;
+                        deleteButton.textContent = "Eliminando...";
+
+                        try {
+                            const deleteResponse = await fetch(
+                                `/api/products/${product.id}`,
+                                {
+                                    method: "DELETE"
+                                }
+                            );
+
+                            if (!deleteResponse.ok) {
+                                throw new Error(
+                                    deleteResponse.status === 404
+                                        ? "El producto ya no existe."
+                                        : "No se pudo eliminar el producto."
+                                );
+                            }
+
+                            if (editingProductId === product.id) {
+                                resetProductForm();
+                            }
+
+                            await loadProducts();
+
+                            formMessage.textContent =
+                                `El producto "${product.name}" se ha eliminado correctamente.`;
+                            formMessage.className = "success-message";
+
+                        } catch (error) {
+                            formMessage.textContent = error.message;
+                            formMessage.className = "error-message";
+
+                        } finally {
+                            deleteButton.disabled = false;
+                            deleteButton.textContent = "Eliminar";
+                        }
+                    });
+
+                    actions.appendChild(deleteButton);
+                    actionsCell.appendChild(actions);
+                    row.appendChild(actionsCell);
+
+                    table.appendChild(row);
+                }
+
+                message.textContent = products.length === 0
+                    ? "Todavía no hay productos registrados."
+                    : "";
+
+            } catch (error) {
+                message.textContent =
+                    "No se pudieron cargar los productos. Comprueba que la API está funcionando.";
+
+                console.error(error);
+            }
+        }
+
+        // Rellenar el formulario para editar un producto
+        function editProduct(product) {
+            editingProductId = product.id;
+
+            document.getElementById("name").value = product.name;
+            document.getElementById("sku").value = product.sku;
+            document.getElementById("price").value = product.price;
+            document.getElementById("stock").value = product.stock;
+            document.getElementById("minimumStock").value =
+                product.minimumStock;
+
+            formTitle.textContent = "Editar producto";
+            submitButton.textContent = "Guardar cambios";
+            cancelEditButton.hidden = false;
+
+            formMessage.textContent =
+                "Modifica los campos y pulsa Guardar cambios.";
+            formMessage.className = "";
+
+            productForm.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+            document.getElementById("name").focus();
+        }
+
+        // Restablecer el formulario para crear un producto nuevo
+        function resetProductForm() {
+            editingProductId = null;
+
+            productForm.reset();
+
+            document.getElementById("stock").value = "0";
+            document.getElementById("minimumStock").value = "5";
+
+            formTitle.textContent = "Añadir nuevo producto";
+            submitButton.textContent = "Guardar producto";
+            cancelEditButton.hidden = true;
+
+            formMessage.textContent = "";
+            formMessage.className = "";
+        }
+
+        // Cancelar edición
+        cancelEditButton.addEventListener("click", function () {
+            resetProductForm();
+        });
+
+        // Crear un producto o actualizar uno existente
+        productForm.addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            formMessage.textContent = "";
+            formMessage.className = "";
+
+            const product = {
+                name: document.getElementById("name").value.trim(),
+                sku: document.getElementById("sku").value.trim(),
+                price: Number(document.getElementById("price").value),
+                stock: Number(document.getElementById("stock").value),
+                minimumStock: Number(
+                    document.getElementById("minimumStock").value
+                )
+            };
+
+            const isEditing = editingProductId !== null;
+
+            submitButton.disabled = true;
+            cancelEditButton.disabled = true;
+
+            submitButton.textContent = isEditing
+                ? "Actualizando..."
+                : "Guardando...";
+
+            try {
+                const url = isEditing
+                    ? `/api/products/${editingProductId}`
+                    : "/api/products";
+
+                const response = await fetch(url, {
+                    method: isEditing ? "PUT" : "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(product)
+                });
+
+                if (!response.ok) {
+                    let errorMessage = isEditing
+                        ? "No se pudo actualizar el producto."
+                        : "No se pudo guardar el producto.";
+
+                    if (response.status === 409) {
+                        errorMessage =
+                            "Ya existe un producto con ese SKU.";
+
+                    } else if (response.status === 404) {
+                        errorMessage =
+                            "El producto ya no existe. Recarga la página.";
+
+                    } else if (response.status === 400) {
+                        const errorData = await response.json();
+
+                        if (errorData.errors) {
+                            errorMessage = Object.values(errorData.errors)
+                                .flat()
+                                .join(" ");
+                        } else if (errorData.message) {
+                            errorMessage = errorData.message;
+                        } else {
+                            errorMessage =
+                                "Los datos no son válidos. Revísalos e inténtalo de nuevo.";
+                        }
+
+                    } else if (response.status >= 500) {
+                        errorMessage =
+                            "Error del servidor. Inténtalo más tarde.";
+                    }
+
+                    throw new Error(errorMessage);
+                }
+
+                resetProductForm();
+
+                formMessage.textContent = isEditing
+                    ? "¡Producto actualizado correctamente!"
+                    : "¡Producto guardado correctamente!";
+
+                formMessage.className = "success-message";
+
+                await loadProducts();
+
+            } catch (error) {
+                formMessage.textContent = error.message;
+                formMessage.className = "error-message";
+
+                console.error(error);
+
+            } finally {
+                submitButton.disabled = false;
+                cancelEditButton.disabled = false;
+
+                submitButton.textContent = editingProductId === null
+                    ? "Guardar producto"
+                    : "Guardar cambios";
+            }
+        });
+
+        // Cargar el inventario al abrir la página
+        loadProducts();
+    </script>
+</body>
+</html>
