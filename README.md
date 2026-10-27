@@ -6,6 +6,10 @@
 
 StockPilot es una aplicación web para gestionar productos e inventario de forma sencilla. Permite registrar productos, consultar existencias, actualizar información y controlar los niveles de stock.
 
+## Vista Previa
+
+![Panel principal de StockPilot](wwwroot/images/stockpilot-dashboard.png)
+
 ## Funcionalidades
 
 - **Gestión de productos:** crear, consultar, editar y eliminar productos.
